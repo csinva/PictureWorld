@@ -1,0 +1,20 @@
+The master branch will create a basic canvas that lays out images
+
+	-create canvas
+		-webGL for 3d
+	-saving and loading
+	-get google images
+	-load images
+		-html 5
+	-move images
+		-kinetic js
+	-pick images / compare images
+	-cartoonify image
+	-load images
+		-HTML 5
+	-merge images
+
+Future implementations could cartoonize people, specialize it to do things like make cartoons or travel maps or 3d models
+
+	-render 3d
+		-insight3d source code

@@ -1,0 +1,67 @@
+div{
+	background-color:white;
+	width:1600;
+	height:500px;
+	border:1px solid #d3d3d3;
+}
+
+div:hover{
+	border:1px solid #197CBF;
+}
+
+h1{
+	text-align:center;
+}
+h1:hover{
+	color: #197CBF;
+}
+
+#toolbar{
+	background-color:black;
+	height:100px;
+}
+
+
+
+body {background-color:white;}
+
+textarea
+{
+    background-color: white;
+    border:1px blue;
+    height: 'auto';
+    padding-left:10px;
+    width: 99%;
+	outline: 1px solid #A2A2A2;
+}
+
+table{
+	border:1px white;
+	width:100%;
+}
+table:hover{
+	border:1px blue;
+}
+h1, h3{
+	width:99%;
+}
+tr:hover td{
+	outline:.5px blue;
+}
+tr:td hover{
+	outline:.5px blue;
+}
+td{
+	background-color: #EBEBEB;
+	vertical-align:top;
+	outline:.5px white;
+	width:33%;
+}
+p{
+	color:#CBCBCB;
+	width:400px;
+}
+textarea:focus, td:focus{
+	outline: 1px solid #197CBF;
+}
+
