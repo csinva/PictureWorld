@@ -4,7 +4,8 @@
 <head>
 	<script src="lib/jquery-1.10.2.js"></script>
 	<script src="lib/angular-1.0.7.js"></script>
-	<script src="http://d3lp1msu2r81bx.cloudfront.net/kjs/js/lib/kinetic-v4.5.4.min.js"></script>
+	<!--script src="http://d3lp1msu2r81bx.cloudfront.net/kjs/js/lib/kinetic-v4.5.4.min.js"></script-->
+	<script src="lib/kinetic.js"></script>
 	<link rel="stylesheet" type="text/css" href="lib/style.css" media="screen">
 </head>
 <script>
@@ -12,54 +13,60 @@
 		$scope.testFunction = function(){
 			console.log('test');
 		}
-		$scope.loadUrl = function(){
-		
-		}
+		function drawImage(imageObj) { 
+			//var canvasInstance = document.getElementById('container');
+			//console.log(canvasInstance.style);
+			var stage = new Kinetic.Stage({
+			  container: "container "+$scope.pics.length,
+			  width: $(document).width()-5,//1600,
+			  height: $(document).height()-200
+			});
+			var layer = new Kinetic.Layer();
+
+			// darth vader
+			var darthVaderImg = new Kinetic.Image({
+			  image: imageObj,
+			  x: stage.getWidth() / 2 - 200 / 2,
+			  y: stage.getHeight() / 2 - 137 / 2,
+			  width: 100,
+			  height: 100,
+			  draggable: true
+			});
+
+			// add cursor styling
+			darthVaderImg.on('mouseover', function() {
+			  document.body.style.cursor = 'pointer';
+			});
+			darthVaderImg.on('mouseout', function() {
+			  document.body.style.cursor = 'default';
+			});
+
+			layer.add(darthVaderImg);
+			stage.add(layer);
+	   }
+ 	   $scope.createImage = function(url){
+			console.log('creating');
+			var imageObj = new Image();
+			imageObj.onload = function() {
+				drawImage(this);
+			};
+			imageObj.src = url;//This can be a url example: 'http://www.html5canvastutorials.com/demos/assets/darth-vader.jpg';
+			$scope.pics.append(url);
+	   }
 	}
 </script> 
 
-<body ng-controller="Ctrl">
-<h1 ng-click = "testFunction();loadUrl();" >Load Picture World</h1>
+<body ng-controller="Ctrl" ng-init="pics=[]">
+<button>Load Stage</button>
+<h1 ng-click = "testFunction();createImage('images/pony.png');" >Click to Load a Pony</h1>
+<h1 ng-click = "testFunction();createImage('images/bull.png');" >Click to Load a Bull</h1>
 	<!--canvas id="container"></canvas-->
-	<div id="container"></div>
-	<script defer="defer">
-	  function drawImage(imageObj) { 
-		var canvasInstance = document.getElementById('container');
-		console.log(canvasInstance.style);
-		var stage = new Kinetic.Stage({
-		  container: "container",
-		  width: 1600,
-		  height: 500
-		});
-		var layer = new Kinetic.Layer();
-
-		// darth vader
-		var darthVaderImg = new Kinetic.Image({
-		  image: imageObj,
-		  x: stage.getWidth() / 2 - 200 / 2,
-		  y: stage.getHeight() / 2 - 137 / 2,
-		  width: 200,
-		  height: 137,
-		  draggable: true
-		});
-
-		// add cursor styling
-		darthVaderImg.on('mouseover', function() {
-		  document.body.style.cursor = 'pointer';
-		});
-		darthVaderImg.on('mouseout', function() {
-		  document.body.style.cursor = 'default';
-		});
-
-		layer.add(darthVaderImg);
-		stage.add(layer);
-	  }
-	  var imageObj = new Image();
-	  imageObj.onload = function() {
-		drawImage(this);
-	  };
-	  imageObj.src = 'http://www.html5canvastutorials.com/demos/assets/darth-vader.jpg';
-
+	<div id="container 0"></div>
+	<div id="container 1"></div>
+	
+	
+<script defer="defer">
+	  
 </script>
 
 </body>
