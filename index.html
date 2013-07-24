@@ -10,7 +10,10 @@
 </head>
 <script>
 	function Ctrl($scope){
-
+		$scope.addLocalImage = function(){
+			console.log('name: ',$scope.localName);
+			$scope.addImage('images/'+$scope.localName+'.png');
+		}
 		
  	   $scope.addImage = function(url){
 			$scope.storePositions();
@@ -28,11 +31,15 @@
 						drawImages(images);
 					}
 				}
+				images[index].onerror = function(){
+					console.log('failed to load');
+					$scope.pics.splice(-1,1);
+				}
 				images[index].src = $scope.pics[index].url;
 			}
 		}
 		function drawImages(images) { 
-			console.log(images);
+			console.log('drawImage: ',images);
 			var stage = new Kinetic.Stage({
 			  container: "container",
 			  width: $(document).width()-5,//1600,
@@ -74,23 +81,15 @@
 				 //var shape = $scope.stage.get(index);
 			}
 		}
-		$scope.wreakHavoc = function(){
-			$scope.pics[0].x = 10;
-		}
 	}
 </script> 
 
 <body ng-controller="Ctrl" ng-init="pics=[];images={};">
-<h1 ng-click = "addImage('images/pony.png');" >Click to Load a Pony</h1>
-<h1 ng-click = "addImage('images/bull.png');" >Click to Load a Bull</h1>
-<h1 ng-click="wreakHavoc();">Wreak Havoc</h1>
-	<!--canvas id="container"></canvas-->
+	<input type="text" placeholder="Search Web"></input>
+	<input type="text" placeholder="Search Local" ng-model="localName"></input>
+	</br>
+	<h1 ng-click = "addLocalImage();" >Click to Load a Pony</h1>
+	<h1 ng-click = "addLocalImage();" >Click to Load Local Image</h1>
 	<div id="container"></div>
-	
-	
-<script defer="defer">
-	  
-</script>
-
 </body>
 </html>
