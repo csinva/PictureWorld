@@ -1,18 +1,49 @@
 <!DOCTYPE html>
-<meta charset="UTF-8">
 <html ng-app>
-<head>
+  <head>
 	<script src="lib/jquery-1.10.2.js"></script>
 	<script src="lib/angular-1.0.7.js"></script>
-	<!--script src="http://d3lp1msu2r81bx.cloudfront.net/kjs/js/lib/kinetic-v4.5.4.min.js"></script-->
 	<script src="lib/kinetic.js"></script>
 	<link rel="stylesheet" type="text/css" href="lib/style.css" media="screen">
-</head>
-<script>
-	function Ctrl($scope){
+    <script src="https://www.google.com/jsapi"></script>
+	<script>google.load('search', '1');</script>
+    <script>
+	  function Ctrl($scope){
+		  function searchComplete() {
+			if ($scope.imageSearch.results && $scope.imageSearch.results.length > 0) {
+			  var results = $scope.imageSearch.results;
+			  var len = results.length
+			  console.log('num results: ',len);
+			  var index = Math.floor(Math.random()*len);;
+			  for (var i = 0; i < 1; i++){//results.length; i++) {
+				var result = results[index];
+				console.log('adding: ',result.url);//"/image-search/v1/result.tbUrl;"
+				$scope.addImage(result.url);
+			  }
+			}
+			else{
+				console.log('no images found');
+			}
+		  }
+		$scope.onLoad = function() {
+			console.log("loading");
+			$scope.imageSearch = new google.search.ImageSearch();
+			$scope.imageSearch.setRestriction(
+			  google.search.ImageSearch.RESTRICT_FILETYPE,
+			  google.search.ImageSearch.FILETYPE_PNG
+			);
+			$scope.imageSearch.setRestriction(
+			  google.search.ImageSearch.RESTRICT_IMAGESIZE,
+			  google.search.ImageSearch.IMAGESIZE_MEDIUM);//there has to be a better way
+			$scope.imageSearch.setSearchCompleteCallback(this, searchComplete, null);
+			//google.search.Search.getBranding('branding');
+		  }
+		google.setOnLoadCallback($scope.onLoad);
+		/////////////////////////////////////////////////////////////////////////////////////////////////////GOOGLE STUFF -- maybe change to Flickr
+		
 		$scope.addWebImage = function(){
-			console.log('name: ',$scope.webName);
-			$scope.addImage('http://static.giantbomb.com/uploads/original/0/5370/1499438-mkdd_banana.jpg');
+			console.log('searching for: ',$scope.webName);
+			$scope.imageSearch.execute($scope.webName||'sharknado');
 		}
 		$scope.addLocalImage = function(){
 			console.log('name: ',$scope.localName);
@@ -20,6 +51,9 @@
 		}
 		
  	   $scope.addImage = function(url){
+			$scope.loading = "Loading...";
+			if(!$scope.$$phase) 
+				$scope.$apply();
 			$scope.storePositions();
 			$scope.pics.push({url:url});
 			
@@ -34,6 +68,7 @@
 					if(++loadedImages >= numImages){
 						drawImages(images);
 					}
+					
 				}
 				images[index].onerror = function(){
 					console.log('failed to load');
@@ -51,12 +86,13 @@
 			});
 			var layer = new Kinetic.Layer();
 			for (index in images){
+				console.log('index: ',index);
 				var img = new Kinetic.Image({
 					  image: images[index],
 					  x: $scope.pics[index].x || stage.getWidth() / 2 - 200 / 2,
 					  y: $scope.pics[index].y || stage.getHeight() / 2 - 137 / 2,
-					  width: $scope.pics[index].width || 100,
-					  height: $scope.pics[index].height || 100,
+					  width: $scope.pics[index].width || 300,
+					  height: $scope.pics[index].height || 300,
 					  draggable: true,
 					  id: index
 					});
@@ -74,6 +110,9 @@
 			}
 			stage.add(layer);
 			$scope.stage = stage;
+			$scope.loading = "Load Complete";
+			if(!$scope.$$phase) 
+				$scope.$apply();
 		}
 		$scope.storePositions = function(){
 			for(index in $scope.pics){
@@ -82,13 +121,16 @@
 			}
 		}
 	}
-</script> 
+    </script>
 
-<body ng-controller="Ctrl" ng-init="pics=[];images={};">
+  </head>
+  <body ng-controller="Ctrl" ng-init="pics=[];images={};">
 	</br><input type="text" placeholder="Search Web" ng-model="webName"></input>
 	<input type="text" placeholder="Search Local" ng-model="localName"></input></br>
 	<h1 ng-click = "addWebImage();" >Click to Load Web Image</h1>
 	<h1 ng-click = "addLocalImage();" >Click to Load Local Image</h1>
+	<h1>{{loading}}</h1>
 	<div id="container"></div>
-</body>
+    <div id="branding"  style="float: left;"></div><br />
+  </body>
 </html>
