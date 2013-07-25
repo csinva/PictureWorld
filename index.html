@@ -10,6 +10,10 @@
 </head>
 <script>
 	function Ctrl($scope){
+		$scope.addWebImage = function(){
+			console.log('name: ',$scope.webName);
+			$scope.addImage('http://static.giantbomb.com/uploads/original/0/5370/1499438-mkdd_banana.jpg');
+		}
 		$scope.addLocalImage = function(){
 			console.log('name: ',$scope.localName);
 			$scope.addImage('images/'+$scope.localName+'.png');
@@ -73,22 +77,17 @@
 		}
 		$scope.storePositions = function(){
 			for(index in $scope.pics){
-				//console.log(index);
-				//console.log('img: ',$scope.images);
-				//console.log('img: ',$scope.images[''+index].getAbsolutePosition().x);
 				$scope.pics[index].x = $scope.images[''+index].getAbsolutePosition().x;
 				$scope.pics[index].y = $scope.images[''+index].getAbsolutePosition().y;
-				 //var shape = $scope.stage.get(index);
 			}
 		}
 	}
 </script> 
 
 <body ng-controller="Ctrl" ng-init="pics=[];images={};">
-	<input type="text" placeholder="Search Web"></input>
-	<input type="text" placeholder="Search Local" ng-model="localName"></input>
-	</br>
-	<h1 ng-click = "addLocalImage();" >Click to Load a Pony</h1>
+	</br><input type="text" placeholder="Search Web" ng-model="webName"></input>
+	<input type="text" placeholder="Search Local" ng-model="localName"></input></br>
+	<h1 ng-click = "addWebImage();" >Click to Load Web Image</h1>
 	<h1 ng-click = "addLocalImage();" >Click to Load Local Image</h1>
 	<div id="container"></div>
 </body>
