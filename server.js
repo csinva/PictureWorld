@@ -1,25 +1,12 @@
-var app = require('http').createServer(createServer);
-var fs = require('fs'); 
-var url = require('url');
+var express = require('express'),
+    app = express();
 
-function createServer(req, res) {
-    var path = url.parse(req.url).pathname;
-    var fsCallback = function(error, data) {
-        if(error) throw error;
+app.configure(function(){
+  app.use(express.static(__dirname));
+});
 
-        res.writeHead(200);
-        res.write(data);
-        res.end();
-    }
+/*app.get('/', function(req, res){
+  res.sendfile(__dirname + '/index.html');
+});*/
 
-    switch(path) {
-        case '/subpage':
-            doc = fs.readFile(__dirname + '/subpage.html', fsCallback);
-        break;
-        default:
-            doc = fs.readFile(__dirname + '/index.html', fsCallback);
-        break;
-    }
-}
-
-app.listen(8080);
+app.listen(3000);
